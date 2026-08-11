@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -13,12 +14,18 @@ func main() {
 		fmt.Print("$ ")
 
 		input.Scan()
-		command := input.Text()
+		prompt := input.Text()
 
-		if command == "exit" {
+		if prompt == "exit" {
 			os.Exit(0)
 		}
 
-		fmt.Printf("%s: command not found\n", command)
+		arguments := strings.Split(prompt, " ")
+
+		if arguments[0] == "echo" {
+			fmt.Println(strings.Join(arguments[1:], " "))
+		} else {
+			fmt.Printf("%s: command not found\n", prompt)
+		}
 	}
 }
