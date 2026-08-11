@@ -16,15 +16,14 @@ func main() {
 		input.Scan()
 		prompt := input.Text()
 
-		if prompt == "exit" {
-			os.Exit(0)
-		}
-
 		arguments := strings.Split(prompt, " ")
 
-		if arguments[0] == "echo" {
+		switch arguments[0] {
+		case "exit":
+			os.Exit(0)
+		case "echo":
 			fmt.Println(strings.Join(arguments[1:], " "))
-		} else {
+		default:
 			fmt.Printf("%s: command not found\n", prompt)
 		}
 	}
