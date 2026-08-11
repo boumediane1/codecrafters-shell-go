@@ -14,6 +14,11 @@ func main() {
 
 		input.Scan()
 		command := input.Text()
+
+		if command == "exit" {
+			os.Exit(0)
+		}
+
 		fmt.Printf("%s: command not found\n", command)
 	}
 }
