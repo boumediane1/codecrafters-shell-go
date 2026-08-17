@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -32,14 +33,31 @@ func main() {
 				path, err := exec.LookPath(arguments[1])
 
 				if err != nil {
-					fmt.Printf("%s: not found\n", arguments[1])
-				} else {
-					fmt.Printf("%s is %s\n", arguments[1], path)
+					if errors.Is(err, exec.ErrNotFound) {
+						fmt.Printf("%s: not found\n", arguments[1])
+					}
+					break
 				}
+
+				fmt.Printf("%s is %s\n", arguments[1], path)
 
 			}
 		default:
-			fmt.Printf("%s: command not found\n", arguments[0])
+			_, err := exec.LookPath(arguments[0])
+			if err != nil {
+				if errors.Is(err, exec.ErrNotFound) {
+					fmt.Printf("%s: command not found\n", arguments[0])
+				}
+				break
+			}
+
+			cmd := exec.Command(arguments[0], arguments[1:]...)
+			out, err := cmd.CombinedOutput()
+			if err != nil {
+				break
+			}
+
+			fmt.Print(string(out))
 		}
 	}
 }
